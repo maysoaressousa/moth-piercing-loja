@@ -1,4 +1,5 @@
 import { Search, User, Heart, ShoppingBag } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export const Navbar = () => {
   const navLinks = [
@@ -23,13 +24,13 @@ export const Navbar = () => {
       <ul className="hidden md:flex items-center gap-10">
         {navLinks.map((link) => (
           <li key={link.name} className="relative group">
-            <a
-              href={`#${link.name.toLowerCase()}`}
+            <Link
+              to={`#${link.name.toLowerCase()}`}
               className={`font-sans text-[11px] tracking-[0.2em] uppercase transition-colors duration-300 
                 ${link.active ? 'text-primary' : 'text-secondary hover:text-primary'}`}
             >
               {link.name}
-            </a>
+            </Link>
             {/* Underline para o estado ativo ou hover */}
             {link.active && (
               <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-primary-container" />
