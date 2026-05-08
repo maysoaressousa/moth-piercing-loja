@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  /* Profundidade Tonal e Cores do Manifesto */
+  --color-background: #131313;
+  --color-primary: #ffb4aa;
+  --color-primary-container: #4a0404; /* O "Sangue/Vinho" */
+  --color-secondary: #c6c6c6; /* O "Metal/Prata" */
+  
+  /* Escalas de Superfície (Hierarchy & Nesting) */
+  --color-surface-lowest: #0e0e0e;
+  --color-surface-low: #161616;
+  --color-surface-high: #2b2b2b;
+
+  /* Tipografia: The Classical Modernist */
+  --font-serif: "Noto Serif", serif;
+  --font-sans: "Manrope", sans-serif;
+
+  /* Spacing Scale do Manual (4rem e 5.5rem) */
+  --spacing-12: 4rem;
+  --spacing-16: 5.5rem;
+}
+
+@layer base {
+  body {
+    /* on-surface (#e5e2e1) para evitar o branco puro */
+    @apply bg-background text-[#e5e2e1] antialiased;
+    margin: 0;
+  }
+}

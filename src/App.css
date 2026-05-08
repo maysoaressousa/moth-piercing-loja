@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-background text-on-surface;
+  margin: 0;
+  font-family: 'Manrope', sans-serif;
+}
