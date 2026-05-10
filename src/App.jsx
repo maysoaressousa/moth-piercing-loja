@@ -2,12 +2,11 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar';
 import { RelicBar } from './components/layout/RelicBar';
-
-// Importando as páginas que você acabou de criar
 import Home from './pages/Home';
 import ProductDetail from './pages/ProductDetail';
 import Category from './pages/Category';
 import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
 
 function App() {
   return (
@@ -22,6 +21,7 @@ function App() {
           <Route path="/produto/:id" element={<ProductDetail />} />
           <Route path="/colecao/:slug" element={<Category />} />
           <Route path="/carrinho" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </main>
 
