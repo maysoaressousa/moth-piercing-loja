@@ -1,29 +1,75 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { PRODUCTS } from '../data/products';
 import { ProductCard } from '../components/product/ProductCard';
 
-export default function Category() {
-  const { slug } = useParams(); // Pega o nome da categoria da URL
+const MATERIALS = ['Todos', 'Titânio', 'Ouro', 'Aço'];
 
-  // Filtra os produtos que pertencem à categoria da URL
-  const filteredProducts = PRODUCTS.filter(
-    (product) => product.category === slug.toLowerCase()
-  );
+export default function Category() {
+  const { slug } = useParams();
+  const [selectedMaterial, setSelectedMaterial] = useState('Todos');
+  const [sortOrder, setSortOrder] = useState('default');
+
+  // Lógica de filtragem e ordenação (Memorizada para performance)
+  const filteredProducts = useMemo(() => {
+    let result = PRODUCTS.filter(p => p.category === slug.toLowerCase());
+
+    if (selectedMaterial !== 'Todos') {
+      result = result.filter(p => p.material === selectedMaterial);
+    }
+
+    if (sortOrder === 'price-asc') {
+      result.sort((a, b) => a.price - b.price);
+    } else if (sortOrder === 'price-desc') {
+      result.sort((a, b) => b.price - a.price);
+    }
+
+    return result;
+  }, [slug, selectedMaterial, sortOrder]);
 
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 pt-32 pb-20">
-      {/* Cabeçalho Editorial: Noto Serif */}
-      <header className="mb-16 border-b border-outline-variant/10 pb-8">
-        <p className="font-sans text-[10px] tracking-[0.3em] text-secondary mb-2 uppercase">
-          Curated Collection
-        </p>
-        <h1 className="font-serif text-5xl md:text-6xl uppercase tracking-tighter italic">
-          {slug.replace('-', ' ')}
-        </h1>
+      {/* Cabeçalho Editorial */}
+      <header className="mb-12">
+        <p className="font-sans text-[10px] tracking-[0.4em] text-primary mb-2 uppercase">Collection</p>
+        <h1 className="font-serif text-5xl md:text-6xl uppercase tracking-tighter italic">{slug}</h1>
       </header>
 
-      {/* Grid de Produtos: Espaçamento 12 (4rem) */}
+      {/* BARRA DE FILTROS: Tonal Layering */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16 bg-surface-lowest p-6">
+        {/* Filtro por Material */}
+        <div className="flex gap-6 items-center">
+          <span className="font-sans text-[10px] tracking-widest uppercase text-secondary">Material:</span>
+          <div className="flex gap-4">
+            {MATERIALS.map(mat => (
+              <button
+                key={mat}
+                onClick={() => setSelectedMaterial(mat)}
+                className={`font-sans text-[10px] tracking-widest uppercase transition-colors
+                  ${selectedMaterial === mat ? 'text-primary' : 'text-secondary hover:text-[#e5e2e1]'}`}
+              >
+                {mat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Ordenação por Preço */}
+        <div className="flex gap-6 items-center">
+          <span className="font-sans text-[10px] tracking-widest uppercase text-secondary">Ordenar:</span>
+          <select 
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="bg-transparent font-sans text-[10px] tracking-widest uppercase text-[#e5e2e1] focus:outline-none cursor-pointer"
+          >
+            <option value="default" className="bg-background">Lançamentos</option>
+            <option value="price-asc" className="bg-background">Menor Preço</option>
+            <option value="price-desc" className="bg-background">Maior Preço</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Grid de Resultados */}
       {filteredProducts.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
           {filteredProducts.map((product) => (
@@ -31,10 +77,8 @@ export default function Category() {
           ))}
         </div>
       ) : (
-        <div className="h-64 flex items-center justify-center border border-dashed border-outline-variant/20">
-          <p className="font-serif italic text-secondary/50">
-            Nenhuma joia encontrada nesta profundeza...
-          </p>
+        <div className="h-64 flex items-center justify-center border border-dashed border-outline-variant/10">
+          <p className="font-serif italic text-secondary/40">Nenhuma joia encontrada com estes critérios.</p>
         </div>
       )}
     </div>
