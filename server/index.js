@@ -32,6 +32,27 @@ app.get('/products/category/:slug', async (req, res) => {
   }
 });
 
+// Rota para cadastrar um novo produto
+app.post('/products', async (req, res) => {
+  const { name, price, category, material, image, description } = req.body;
+  
+  try {
+    const newProduct = await prisma.product.create({
+      data: {
+        name,
+        price: parseFloat(price),
+        category,
+        material,
+        image,
+        description
+      }
+    });
+    res.json(newProduct);
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao ritualizar novo produto no banco." });
+  }
+});
+
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`---`);
